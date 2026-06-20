@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '../organisms/Header';
 import { SearchInput } from '../molecules/SearchInput';
 import { ProductGrid } from '../organisms/ProductGrid';
@@ -6,13 +7,16 @@ import { CartSummary } from '../organisms/CartSummary';
 import { SlidersHorizontal } from 'lucide-react';
 import { CATEGORIES, MOCK_PRODUCTS } from '../../mocks';
 import { useCartStore } from '../../store/cartStore';
+import { useAuthStore } from '../../store/authStore';
 
 export const MenuPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Connect to Zustand Cart Store
+  // Hooks
+  const navigate = useNavigate();
   const { items: cartItems, addItem, updateQuantity, getCartTotal } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
 
   // Select the appropriate array directly from the MOCK_PRODUCTS object
   const currentCategoryProducts = (MOCK_PRODUCTS as Record<string, any[]>)[activeCategory] || MOCK_PRODUCTS["Todos"];
@@ -31,7 +35,7 @@ export const MenuPage: React.FC = () => {
     const product = MOCK_PRODUCTS["Todos"].find(p => p.id === id);
     if (product) {
       addItem({
-        id: product.id,
+        id: product.id as string | number,
         name: product.title,
         price: product.price
       });
@@ -42,6 +46,16 @@ export const MenuPage: React.FC = () => {
     const cartItem = cartItems.find(item => item.id === id);
     if (cartItem) {
       updateQuantity(id, cartItem.quantity - 1);
+    }
+  };
+
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      // Not logged in, redirect to login
+      navigate('/login', { state: { from: '/cardapio' } });
+    } else {
+      // Logged in, normally would go to checkout page
+      alert("Sucesso! Você está logado e o pedido está sendo preparado!");
     }
   };
 
@@ -99,7 +113,7 @@ export const MenuPage: React.FC = () => {
 
         {/* Right Column - Cart Summary */}
         <div className="hidden lg:block w-[360px]">
-          <CartSummary items={cartItems} />
+          <CartSummary items={cartItems} onCheckout={handleCheckout} />
         </div>
       </main>
     </div>

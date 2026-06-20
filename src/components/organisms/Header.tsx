@@ -1,12 +1,15 @@
 import React from 'react';
-import { Sun, User, ShoppingBag } from 'lucide-react';
+import { User, ShoppingBag, LogOut } from 'lucide-react';
 import logo from "../../assets/images/logo-pequeno.png"
+import { useAuthStore } from '../../store/authStore';
 
 interface HeaderProps {
   cartTotal?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({ cartTotal = 0 }) => {
+  const { isAuthenticated, user, logout } = useAuthStore();
+
   const formattedTotal = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
@@ -25,9 +28,18 @@ export const Header: React.FC<HeaderProps> = ({ cartTotal = 0 }) => {
       </nav>
 
       <div className="flex items-center gap-4">
-        <button className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
-          <User size={24} />
-        </button>
+        {isAuthenticated ? (
+          <div className="flex items-center gap-2 mr-2">
+            <span className="text-text-primary font-bold text-lg hidden md:inline-block">Olá, {user?.name.split(' ')[0]}</span>
+            <button onClick={logout} className="p-2 text-text-secondary hover:text-error hover:bg-red-50 rounded-full transition-colors cursor-pointer" aria-label="Sair">
+              <LogOut size={20} />
+            </button>
+          </div>
+        ) : (
+          <button className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
+            <User size={24} />
+          </button>
+        )}
         <button className="flex items-center gap-2 px-4 py-2 bg-bg-surface border border-gray-200 rounded-full hover:bg-gray-50 transition-colors" aria-label="Carrinho">
           <ShoppingBag className="text-primary" size={20} />
           <span className="font-bold text-text-primary">{formattedTotal}</span>

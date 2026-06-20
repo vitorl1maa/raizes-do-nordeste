@@ -1,0 +1,38 @@
+import React from 'react';
+import { Sun, User, ShoppingBag } from 'lucide-react';
+
+interface HeaderProps {
+  cartTotal?: number;
+}
+
+export const Header: React.FC<HeaderProps> = ({ cartTotal = 0 }) => {
+  const formattedTotal = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(cartTotal);
+
+  return (
+    <header className="flex items-center justify-between px-10 py-4 bg-bg-surface shadow-sm">
+      <div className="flex items-center gap-3">
+        <Sun className="text-primary" size={32} />
+        <span className="text-2xl font-bold text-primary">Raízes</span>
+      </div>
+
+      <nav className="hidden md:flex items-center gap-8">
+        <a href="#" className="text-primary font-semibold">Cardápio</a>
+        <a href="#" className="text-text-secondary font-medium hover:text-primary transition-colors">Promoções</a>
+        <a href="#" className="text-text-secondary font-medium hover:text-primary transition-colors">Fidelidade</a>
+      </nav>
+
+      <div className="flex items-center gap-4">
+        <button className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
+          <User size={24} />
+        </button>
+        <button className="flex items-center gap-2 px-4 py-2 bg-bg-surface border border-gray-200 rounded-full hover:bg-gray-50 transition-colors" aria-label="Carrinho">
+          <ShoppingBag className="text-primary" size={20} />
+          <span className="font-bold text-text-primary">{formattedTotal}</span>
+        </button>
+      </div>
+    </header>
+  );
+};

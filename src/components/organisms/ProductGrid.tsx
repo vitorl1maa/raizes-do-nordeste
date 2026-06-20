@@ -4,9 +4,10 @@ import { ProductCard, type ProductCardProps } from './ProductCard';
 interface ProductGridProps {
   products: (ProductCardProps & { id: string | number })[];
   onAddProduct?: (id: string | number) => void;
+  onRemoveProduct?: (id: string | number) => void;
 }
 
-export const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddProduct }) => {
+export const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddProduct, onRemoveProduct }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
       {products.map(product => (
@@ -14,6 +15,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddProduct
           key={product.id} 
           {...product} 
           onAdd={() => onAddProduct?.(product.id)}
+          onRemove={() => onRemoveProduct?.(product.id)}
         />
       ))}
     </div>

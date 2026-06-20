@@ -8,7 +8,9 @@ export interface ProductCardProps {
   price: number;
   imageUrl: string;
   badge?: string;
+  quantity?: number;
   onAdd?: () => void;
+  onRemove?: () => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -17,7 +19,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   price,
   imageUrl,
   badge,
-  onAdd
+  quantity,
+  onAdd,
+  onRemove
 }) => {
   return (
     <article className="flex flex-col gap-4 p-4 bg-bg-surface rounded-[24px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
@@ -41,7 +45,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </p>
       </div>
 
-      <ProductPrice price={price} onAdd={onAdd} />
+      <ProductPrice price={price} quantity={quantity} onAdd={onAdd} onRemove={onRemove} />
     </article>
   );
 };

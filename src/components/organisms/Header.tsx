@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sun, User, ShoppingBag } from 'lucide-react';
+import logo from "../../assets/images/logo-pequeno.png"
 
 interface HeaderProps {
   cartTotal?: number;
@@ -12,10 +13,9 @@ export const Header: React.FC<HeaderProps> = ({ cartTotal = 0 }) => {
   }).format(cartTotal);
 
   return (
-    <header className="flex items-center justify-between px-10 py-4 bg-bg-surface shadow-sm">
+    <header className="flex items-center justify-between px-10 py-4 bg-bg-surface shadow-sm fixed top-0 z-10 w-full">
       <div className="flex items-center gap-3">
-        <Sun className="text-primary" size={32} />
-        <span className="text-2xl font-bold text-primary">Raízes</span>
+        <img src={logo} alt="Logo" className="w-16" />
       </div>
 
       <nav className="hidden md:flex items-center gap-8">

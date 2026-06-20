@@ -49,7 +49,7 @@ export const MenuPage: React.FC = () => {
     <div className="min-h-screen bg-bg-base flex flex-col text-left">
       <Header cartTotal={getCartTotal()} />
 
-      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 md:px-10 py-10 flex flex-col lg:flex-row gap-16">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 md:px-10 pt-28 pb-10 flex flex-col lg:flex-row gap-16">
         {/* Left Column - Menu */}
         <div className="flex-1 flex flex-col gap-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

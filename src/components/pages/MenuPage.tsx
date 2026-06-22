@@ -52,10 +52,9 @@ export const MenuPage: React.FC = () => {
   const handleCheckout = () => {
     if (!isAuthenticated) {
       // Not logged in, redirect to login
-      navigate('/login', { state: { from: '/cardapio' } });
+      navigate('/login', { state: { from: '/checkout' } });
     } else {
-      // Logged in, normally would go to checkout page
-      alert("Sucesso! Você está logado e o pedido está sendo preparado!");
+      navigate('/checkout');
     }
   };
 

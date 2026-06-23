@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, QrCode, CreditCard, CheckCircle2 } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ChevronLeft, QrCode, CreditCard, CheckCircle2, Check, AlertCircle } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Header } from '../organisms/Header';
@@ -10,14 +10,22 @@ import { useAuthStore } from '../../store/authStore';
 
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
-  const { items, getCartTotal, clearCart } = useCartStore();
+  const location = useLocation();
+  const { items, getCartTotal, clearCart, activeCoupon, applyCoupon, removeCoupon } = useCartStore();
   const { isAuthenticated, user } = useAuthStore();
 
-  const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
+  const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup' | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'pix' | 'credit_card'>('pix');
-  const [coupon, setCoupon] = useState('');
-  const [discount, setDiscount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [couponInput, setCouponInput] = useState(activeCoupon || '');
+  const [toastConfig, setToastConfig] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+
+  const showToastMessage = (message: string, type: 'success' | 'error' = 'success') => {
+    setToastConfig({ message, type });
+    setTimeout(() => setToastConfig(null), 3000);
+  };
+  
+  const [isWaitingPaymentModalOpen, setIsWaitingPaymentModalOpen] = useState(false);
+  const [isOrderConfirmedModalOpen, setIsOrderConfirmedModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [address, setAddress] = useState<AddressData | null>(null);
 
@@ -30,40 +38,60 @@ export const CheckoutPage: React.FC = () => {
     }
   }, [isAuthenticated, items, navigate]);
 
+  useEffect(() => {
+    if (location.state?.showToast) {
+      showToastMessage('Cupom aplicado com sucesso!', 'success');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
   if (!isAuthenticated || items.length === 0) return null;
 
   const subtotal = getCartTotal();
   const deliveryFee = deliveryOption === 'delivery' ? 5.00 : 0;
+  
+  let discount = 0;
+  if (activeCoupon === 'RAIZES20') discount = subtotal * 0.20;
+  else if (activeCoupon === 'BEMVINDO10' || activeCoupon === 'RAIZES10') discount = subtotal * 0.10;
+  else if (activeCoupon === 'FRETE0' && deliveryOption === 'delivery') discount = deliveryFee;
+
   const total = subtotal + deliveryFee - discount;
 
   const formatPrice = (value: number) => 
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 
-  const handleApplyCoupon = () => {
-    if (coupon.toUpperCase() === 'RAIZES10') {
-      setDiscount(subtotal * 0.10);
+  const handleApplyCouponClick = () => {
+    const success = applyCoupon(couponInput);
+    if (success) {
+      showToastMessage('Cupom aplicado com sucesso!', 'success');
     } else {
-      setDiscount(0);
-      alert('Cupom inválido');
+      removeCoupon();
+      showToastMessage('Cupom inválido ou expirado', 'error');
     }
   };
 
   const handleConfirmOrder = () => {
     if (deliveryOption === 'delivery' && !address) {
-      alert('Por favor, cadastre um endereço de entrega.');
+      showToastMessage('Por favor, cadastre um endereço de entrega.', 'error');
       setIsAddressModalOpen(true);
       return;
     }
 
-    setIsProcessing(true);
-    // Simulando processamento
+    setIsWaitingPaymentModalOpen(true);
+    
+    // Simula o processamento do pagamento
     setTimeout(() => {
-      clearCart();
-      setIsProcessing(false);
-      alert('Pedido realizado com sucesso!');
-      navigate('/cardapio');
-    }, 1500);
+      setIsWaitingPaymentModalOpen(false);
+      setIsOrderConfirmedModalOpen(true);
+    }, 3000); // 3 segundos de simulação
   };
+
+  const handleFinishProcess = () => {
+    setIsOrderConfirmedModalOpen(false);
+    navigate('/acompanhamento', { state: { deliveryOption, address } });
+  };
+
+  const isFormValid = deliveryOption === 'pickup' || (deliveryOption === 'delivery' && address !== null);
 
   return (
     <div className="min-h-screen bg-bg-surface flex flex-col">
@@ -91,7 +119,7 @@ export const CheckoutPage: React.FC = () => {
             <section className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6">
               <h2 className="text-lg md:text-xl font-bold text-text-primary m-0">Opção de Entrega</h2>
               
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => setDeliveryOption('delivery')}
                   className={`flex-1 py-3 md:py-4 px-4 rounded-2xl text-sm md:text-base font-semibold transition-colors border ${
@@ -100,7 +128,7 @@ export const CheckoutPage: React.FC = () => {
                       : 'bg-white border-gray-200 text-text-secondary hover:border-primary cursor-pointer'
                   }`}
                 >
-                  Entrega em Casa
+                  Entregar no meu endereço
                 </button>
                 <button
                   onClick={() => setDeliveryOption('pickup')}
@@ -197,12 +225,12 @@ export const CheckoutPage: React.FC = () => {
               <h2 className="text-lg md:text-xl font-bold text-text-primary m-0">Cupom de Desconto</h2>
               <div className="flex gap-3">
                 <Input 
-                  placeholder="RAIZES10" 
-                  value={coupon}
-                  onChange={(e) => setCoupon(e.target.value)}
+                  placeholder="RAIZES20" 
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value)}
                   className="flex-1"
                 />
-                <Button onClick={handleApplyCoupon} className="h-full">
+                <Button onClick={handleApplyCouponClick} className="h-full">
                   Aplicar
                 </Button>
               </div>
@@ -234,7 +262,18 @@ export const CheckoutPage: React.FC = () => {
                 )}
                 {discount > 0 && (
                   <div className="flex justify-between items-center text-sm md:text-base">
-                    <span className="text-success">Desconto</span>
+                    <span className="text-success flex items-center gap-2">
+                      Desconto {activeCoupon && `(${activeCoupon})`}
+                      <button 
+                        onClick={() => {
+                          removeCoupon();
+                          setCouponInput('');
+                        }} 
+                        className="text-red-500 hover:text-red-600 hover:underline text-xs font-medium transition-colors"
+                      >
+                        Remover
+                      </button>
+                    </span>
                     <span className="text-success font-semibold">- {formatPrice(discount)}</span>
                   </div>
                 )}
@@ -249,10 +288,10 @@ export const CheckoutPage: React.FC = () => {
                 fullWidth 
                 size="lg" 
                 onClick={handleConfirmOrder} 
-                disabled={isProcessing}
+                disabled={!isFormValid || isWaitingPaymentModalOpen}
                 className="mt-2"
               >
-                {isProcessing ? 'Processando...' : 'Confirmar Pedido'}
+                {isWaitingPaymentModalOpen ? 'Processando...' : 'Confirmar Pedido'}
               </Button>
             </section>
 
@@ -267,6 +306,49 @@ export const CheckoutPage: React.FC = () => {
         onSave={setAddress}
         initialAddress={address}
       />
+
+      {/* Modal Aguardando Pagamento */}
+      {isWaitingPaymentModalOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full flex flex-col items-center text-center gap-4 shadow-xl">
+            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <h3 className="text-xl font-bold text-text-primary">Aguardando Pagamento</h3>
+            <p className="text-text-secondary text-sm">Estamos processando as informações. Por favor, aguarde um momento...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Pedido Confirmado */}
+      {isOrderConfirmedModalOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full flex flex-col items-center text-center gap-6 shadow-xl">
+            <CheckCircle2 className="w-20 h-20 text-green-500" />
+            <div>
+              <h3 className="text-2xl font-bold text-text-primary">Pedido Confirmado!</h3>
+              <p className="text-text-secondary text-sm mt-2">
+                Seu pagamento foi aprovado e o pedido já está sendo preparado.
+              </p>
+            </div>
+            <Button fullWidth onClick={handleFinishProcess}>
+              Acompanhar Pedido
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notificação */}
+      {toastConfig && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] transition-transform animate-fade-in-up">
+          <div className="bg-white rounded-[16px] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.14)] flex items-center gap-3 min-w-[300px]">
+            {toastConfig.type === 'success' ? (
+              <Check className="w-6 h-6 text-green-500 shrink-0" />
+            ) : (
+              <AlertCircle className="w-6 h-6 text-red-500 shrink-0" />
+            )}
+            <span className="text-text-primary font-medium text-sm">{toastConfig.message}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

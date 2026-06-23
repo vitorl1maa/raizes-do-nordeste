@@ -14,13 +14,13 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer';
+  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-primary text-bg-surface hover:bg-primary-dark',
-    secondary: 'bg-secondary text-text-primary hover:bg-yellow-400',
-    outline: 'border-2 border-primary text-primary hover:bg-orange-50',
-    ghost: 'text-text-secondary hover:bg-orange-50',
+    primary: 'bg-primary text-bg-surface hover:bg-primary-dark disabled:bg-gray-300 disabled:text-gray-500 disabled:hover:bg-gray-300',
+    secondary: 'bg-secondary text-text-primary hover:bg-yellow-400 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:bg-gray-200',
+    outline: 'border-2 border-primary text-primary hover:bg-orange-50 disabled:border-gray-300 disabled:text-gray-400 disabled:hover:bg-transparent',
+    ghost: 'text-text-secondary hover:bg-orange-50 disabled:text-gray-400 disabled:hover:bg-transparent',
   };
 
   const sizes = {

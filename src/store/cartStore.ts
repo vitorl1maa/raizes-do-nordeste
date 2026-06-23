@@ -10,17 +10,21 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
+  activeCoupon: string | null;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (id: string | number) => void;
   updateQuantity: (id: string | number, quantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number;
+  applyCoupon: (code: string) => boolean;
+  removeCoupon: () => void;
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      activeCoupon: null,
       addItem: (product) => set((state) => {
         const existingItem = state.items.find(item => item.id === product.id);
         if (existingItem) {
@@ -45,7 +49,18 @@ export const useCartStore = create<CartStore>()(
           )
         };
       }),
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], activeCoupon: null }),
+      applyCoupon: (code) => {
+        if (!code) return false;
+        const upperCode = code.toUpperCase().trim();
+        const validCoupons = ['RAIZES20', 'RAIZES10', 'BEMVINDO10', 'FRETE0'];
+        if (validCoupons.includes(upperCode)) {
+          set({ activeCoupon: upperCode });
+          return true;
+        }
+        return false;
+      },
+      removeCoupon: () => set({ activeCoupon: null }),
       getCartTotal: () => {
         const { items } = get();
         return items.reduce((total, item) => total + (item.price * item.quantity), 0);

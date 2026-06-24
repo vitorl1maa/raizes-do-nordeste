@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = () => {
   }).format(getCartTotal());
 
   return (
-    <header className="flex items-center justify-between px-10 py-4 bg-bg-surface shadow-sm fixed top-0 z-10 w-full">
+    <header className="flex items-center justify-between px-5 py-4 bg-bg-surface shadow-sm fixed top-0 z-10 w-full">
       <div className="flex items-center gap-3">
         <Link to="/">
           <img src={logo} alt="Logo" className="w-16" />
@@ -64,22 +64,32 @@ export const Header: React.FC<HeaderProps> = () => {
 
       <div className="flex items-center gap-4">
         {isAuthenticated ? (
-          <div className="flex items-center gap-2 mr-2">
-            <span className="text-text-primary font-bold text-lg hidden md:inline-block">Olá, {user?.name.split(' ')[0]}</span>
-            <button onClick={logout} className="p-2 text-text-secondary hover:text-error hover:bg-red-50 rounded-full transition-colors cursor-pointer" aria-label="Sair">
-              <LogOut size={20} />
-            </button>
+          <div className="flex items-center gap-2 md:mr-2">
+            <Link to="/perfil" className="flex items-center gap-2 hover:bg-gray-50 rounded-full md:pr-3 transition-colors cursor-pointer" aria-label="Acessar Perfil">
+              {user?.avatar && (
+                <img src={user.avatar} alt="Avatar" className="w-12 h-12 rounded-full border border-gray-200 object-cover bg-white" />
+              )}
+              <span className="text-text-primary font-bold text-lg hidden md:inline-block">Olá, {user?.name.split(' ')[0]}</span>
+            </Link>
           </div>
         ) : (
-          <button className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
+          <Link to="/login" className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
             <User size={24} />
-          </button>
+          </Link>
         )}
-        <span className="flex items-center gap-2 px-4 py-2 bg-bg-surface border border-gray-200 rounded-full hover:bg-gray-50 transition-colors" aria-label="Carrinho">
+        <span className="hidden md:flex items-center gap-2 px-4 py-2 bg-bg-surface border border-gray-200 rounded-full hover:bg-gray-50 transition-colors" aria-label="Carrinho">
           <ShoppingBag className="text-primary" size={20} />
           <span className="font-bold text-text-primary">{formattedTotal}</span>
         </span>
       </div>
+      </div>
+
+      {/* Floating Cart Button for Mobile */}
+      <div className="md:hidden fixed bottom-6 right-4 z-40">
+        <button className="flex items-center gap-2 px-5 py-3 bg-orange-500 text-white rounded-full shadow-[0_8px_24px_rgba(249,115,22,0.4)] hover:bg-orange-600 transition-all cursor-pointer">
+          <ShoppingBag size={22} />
+          <span className="font-bold">{formattedTotal}</span>
+        </button>
       </div>
     </header>
   );

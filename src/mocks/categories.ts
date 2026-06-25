@@ -1,1 +1,1 @@
-export const CATEGORIES = ["Todos", "Mais Pedidos", "Combos", "Bebidas"];
+export const CATEGORIES = ["Todos", "Mais Pedidos", "Pratos Principais", "Entradas", "Sobremesas", "Combos", "Bebidas"];

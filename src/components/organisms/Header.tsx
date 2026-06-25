@@ -11,7 +11,8 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
-  const { getCartTotal } = useCartStore();
+  const items = useCartStore(state => state.items);
+  const getCartTotal = useCartStore(state => state.getCartTotal);
   const location = useLocation();
 
   const formattedTotal = new Intl.NumberFormat('pt-BR', {
@@ -54,10 +55,10 @@ export const Header: React.FC<HeaderProps> = () => {
           aria-label="Promoções"
         >
           <Tag size={22} className="shrink-0" />
-          <span className={`max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[120px] group-hover:opacity-100 group-hover:ml-2 group-hover:pr-2 transition-all duration-300 ${
+          <span className={`max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[160px] group-hover:opacity-100 group-hover:ml-2 group-hover:pr-2 transition-all duration-300 ${
             location.pathname === '/promocoes' ? 'font-semibold' : 'font-medium'
           }`}>
-            Promoções
+            Promoções e Cupons
           </span>
         </Link>
       </nav>
@@ -74,22 +75,22 @@ export const Header: React.FC<HeaderProps> = () => {
           </div>
         ) : (
           <Link to="/login" className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
-            <User size={24} />
+            <></>
           </Link>
         )}
-        <span className="hidden md:flex items-center gap-2 px-4 py-2 bg-bg-surface border border-gray-200 rounded-full hover:bg-gray-50 transition-colors" aria-label="Carrinho">
+        <Link to="/checkout" className="hidden md:flex items-center gap-2 px-4 py-2 bg-bg-surface border border-gray-200 rounded-full hover:bg-gray-50 transition-colors cursor-pointer" aria-label="Carrinho">
           <ShoppingBag className="text-primary" size={20} />
           <span className="font-bold text-text-primary">{formattedTotal}</span>
-        </span>
+        </Link>
       </div>
       </div>
 
       {/* Floating Cart Button for Mobile */}
       <div className="md:hidden fixed bottom-6 right-4 z-40">
-        <button className="flex items-center gap-2 px-5 py-3 bg-orange-500 text-white rounded-full shadow-[0_8px_24px_rgba(249,115,22,0.4)] hover:bg-orange-600 transition-all cursor-pointer">
+        <Link to="/checkout" className="flex items-center gap-2 px-5 py-3 bg-orange-500 text-white rounded-full shadow-[0_8px_24px_rgba(249,115,22,0.4)] hover:bg-orange-600 transition-all cursor-pointer">
           <ShoppingBag size={22} />
           <span className="font-bold">{formattedTotal}</span>
-        </button>
+        </Link>
       </div>
     </header>
   );

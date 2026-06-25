@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '../atoms/Button';
+import { Trash2 } from 'lucide-react';
 
 interface CartItem {
   id: string;
@@ -11,9 +12,10 @@ interface CartItem {
 interface CartSummaryProps {
   items: CartItem[];
   onCheckout?: () => void;
+  onRemoveItem?: (id: string | number) => void;
 }
 
-export const CartSummary: React.FC<CartSummaryProps> = ({ items, onCheckout }) => {
+export const CartSummary: React.FC<CartSummaryProps> = ({ items, onCheckout, onRemoveItem }) => {
   const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   
   const formatPrice = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -27,13 +29,33 @@ export const CartSummary: React.FC<CartSummaryProps> = ({ items, onCheckout }) =
       ) : (
         <div className="flex flex-col gap-4">
           {items.map(item => (
-            <div key={item.id} className="flex justify-between items-start">
-              <span className="text-text-secondary text-sm">
-                {item.quantity}x {item.name}
-              </span>
-              <span className="text-text-primary font-semibold text-sm">
-                {formatPrice(item.price * item.quantity)}
-              </span>
+            <div key={item.id} className="flex justify-between items-start gap-3">
+              <div className="flex flex-col flex-1">
+                <span className="text-text-secondary text-sm font-medium">
+                  {item.quantity}x {item.name}
+                </span>
+                {item.additionals && item.additionals.length > 0 && (
+                  <div className="flex flex-col mt-1 mb-1 pl-2 border-l-2 border-gray-100">
+                    {item.additionals.map((add, idx) => (
+                      <span key={idx} className="text-xs text-gray-500 leading-snug">
+                        + {add.name} <span className="text-gray-400">({formatPrice(add.price)})</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <span className="text-text-primary font-semibold text-sm mt-1">
+                  {formatPrice(item.price * item.quantity)}
+                </span>
+              </div>
+              {onRemoveItem && (
+                <button 
+                  onClick={() => onRemoveItem(item.id)}
+                  className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                  aria-label="Remover item"
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
             </div>
           ))}
         </div>

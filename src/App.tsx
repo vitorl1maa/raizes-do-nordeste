@@ -9,6 +9,8 @@ import { PromotionsPage } from './components/pages/PromotionsPage';
 import { ProfilePage } from './components/pages/ProfilePage';
 import { CookiesDrawer } from './components/organisms/CookiesDrawer';
 import { AvatarModal } from './components/organisms/AvatarModal';
+import { AttendantDashboardPage } from './components/pages/AttendantDashboardPage';
+import { ProductDetailPage } from './components/pages/ProductDetailPage';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/acompanhamento" element={<OrderTrackingPage />} />
         <Route path="/promocoes" element={<PromotionsPage />} />
         <Route path="/perfil" element={<ProfilePage />} />
+        <Route path="/atendimento" element={<AttendantDashboardPage />} />
+        <Route path="/produto/:id" element={<ProductDetailPage />} />
         <Route path="/" element={<Navigate to="/cardapio" replace />} />
       </Routes>
       <CookiesDrawer />

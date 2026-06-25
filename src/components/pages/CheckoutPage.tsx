@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, QrCode, CreditCard, CheckCircle2, Check, AlertCircle } from 'lucide-react';
+import { ChevronLeft, QrCode, CreditCard, CheckCircle2, Check, AlertCircle, Trash2 } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Header } from '../organisms/Header';
@@ -11,7 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { items, getCartTotal, clearCart, activeCoupon, applyCoupon, removeCoupon } = useCartStore();
+  const { items, getCartTotal, clearCart, activeCoupon, applyCoupon, removeCoupon, removeItem } = useCartStore();
   const { isAuthenticated, user } = useAuthStore();
 
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup' | null>(null);
@@ -240,11 +240,33 @@ export const CheckoutPage: React.FC = () => {
             <section className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6">
               <h2 className="text-lg md:text-xl font-bold text-text-primary m-0">Resumo do Pedido</h2>
               
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 {items.map(item => (
-                  <div key={item.id} className="flex justify-between items-start text-sm">
-                    <span className="text-text-secondary">{item.quantity}x {item.name}</span>
-                    <span className="text-text-primary font-medium">{formatPrice(item.price * item.quantity)}</span>
+                  <div key={item.id} className="flex justify-between items-start gap-3">
+                    <div className="flex flex-col flex-1">
+                      <span className="text-text-secondary text-sm font-medium">
+                        {item.quantity}x {item.name}
+                      </span>
+                      {item.additionals && item.additionals.length > 0 && (
+                        <div className="flex flex-col mt-1 mb-1 pl-2 border-l-2 border-gray-100">
+                          {item.additionals.map((add, idx) => (
+                            <span key={idx} className="text-xs text-gray-500 leading-snug">
+                              + {add.name} <span className="text-gray-400">({formatPrice(add.price)})</span>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <span className="text-text-primary font-semibold text-sm mt-1">
+                        {formatPrice(item.price * item.quantity)}
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => removeItem(item.id)}
+                      className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors p-1 mt-1"
+                      aria-label="Remover item"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 ))}
               </div>

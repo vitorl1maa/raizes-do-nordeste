@@ -15,7 +15,7 @@ export const MenuPage: React.FC = () => {
   
   // Hooks
   const navigate = useNavigate();
-  const { items: cartItems, addItem, updateQuantity, getCartTotal } = useCartStore();
+  const { items: cartItems, addItem, updateQuantity, getCartTotal, removeItem } = useCartStore();
   const { isAuthenticated } = useAuthStore();
 
   // Select the appropriate array directly from the MOCK_PRODUCTS object
@@ -25,9 +25,11 @@ export const MenuPage: React.FC = () => {
     return product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
            product.description.toLowerCase().includes(searchQuery.toLowerCase());
   }).map(product => {
-    // Inject current quantity from cart into the product
-    const cartItem = cartItems.find(item => item.id === product.id);
-    return { ...product, quantity: cartItem ? cartItem.quantity : 0 };
+    // Sum quantities of all variations (with or without additionals)
+    const totalQuantity = cartItems
+      .filter(item => String(item.id) === String(product.id) || String(item.id).startsWith(`${product.id}-`))
+      .reduce((sum, item) => sum + item.quantity, 0);
+    return { ...product, quantity: totalQuantity };
   });
 
   const handleAddProduct = (id: string | number) => {
@@ -43,9 +45,11 @@ export const MenuPage: React.FC = () => {
   };
 
   const handleRemoveProduct = (id: string | number) => {
-    const cartItem = cartItems.find(item => item.id === id);
+    // Find a cart item that matches this product ID (exact match first, then variation fallback)
+    const cartItem = cartItems.find(item => String(item.id) === String(id)) || 
+                     cartItems.find(item => String(item.id).startsWith(`${id}-`));
     if (cartItem) {
-      updateQuantity(id, cartItem.quantity - 1);
+      updateQuantity(cartItem.id, cartItem.quantity - 1);
     }
   };
 
@@ -112,7 +116,7 @@ export const MenuPage: React.FC = () => {
 
         {/* Right Column - Cart Summary */}
         <div className="hidden lg:block w-[360px]">
-          <CartSummary items={cartItems} onCheckout={handleCheckout} />
+          <CartSummary items={cartItems} onCheckout={handleCheckout} onRemoveItem={removeItem} />
         </div>
       </main>
     </div>

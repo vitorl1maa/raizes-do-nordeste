@@ -7,12 +7,14 @@ import { Header } from '../organisms/Header';
 import { AddressModal, type AddressData } from '../organisms/AddressModal';
 import { useCartStore } from '../../store/cartStore';
 import { useAuthStore } from '../../store/authStore';
+import { useOrderStore } from '../../store/orderStore';
 
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { items, getCartTotal, clearCart, activeCoupon, applyCoupon, removeCoupon, removeItem } = useCartStore();
   const { isAuthenticated, user } = useAuthStore();
+  const addOrder = useOrderStore(state => state.addOrder);
 
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup' | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'pix' | 'credit_card'>('pix');
@@ -83,6 +85,20 @@ export const CheckoutPage: React.FC = () => {
     setTimeout(() => {
       setIsWaitingPaymentModalOpen(false);
       setIsOrderConfirmedModalOpen(true);
+      
+      addOrder({
+        customer: user?.name || 'Cliente',
+        items: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          additionals: item.additionals
+        })),
+        total: total,
+        status: 'pending',
+        deliveryOption: deliveryOption!,
+        address: address
+      });
     }, 3000); // 3 segundos de simulação
   };
 

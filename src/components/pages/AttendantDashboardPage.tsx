@@ -4,34 +4,20 @@ import { Button } from '../atoms/Button';
 import logo from '../../assets/images/logo-pequeno.png';
 import { LogOut, Clock, CheckCircle, ChefHat, Package, ArrowRight, User } from 'lucide-react';
 
-interface Order {
-  id: string;
-  customer: string;
-  items: string[];
-  total: number;
-  status: 'pending' | 'preparing' | 'ready' | 'delivering' | 'completed';
-  time: string;
-}
-
-const initialOrders: Order[] = [
-  { id: '#1045', customer: 'João Silva', items: ['1x Baião de Dois', '2x Guaraná'], total: 45.90, status: 'pending', time: '10:45' },
-  { id: '#1046', customer: 'Maria Santos', items: ['2x Acarajé', '1x Suco de Caju'], total: 32.00, status: 'pending', time: '10:48' },
-  { id: '#1044', customer: 'Carlos Oliveira', items: ['1x Carne de Sol com Macaxeira'], total: 55.00, status: 'preparing', time: '10:30' },
-  { id: '#1043', customer: 'Ana Lima', items: ['3x Tapioca de Charque'], total: 45.00, status: 'ready', time: '10:15' },
-  { id: '#1042', customer: 'Pedro Costa', items: ['1x Bobó de Camarão', '1x Cerveja'], total: 78.50, status: 'delivering', time: '09:50' },
-];
+import { useOrderStore, type Order } from '../../store/orderStore';
+import { useAttendantAuthStore } from '../../store/attendantAuthStore';
 
 export const AttendantDashboardPage: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, login, logout } = useAttendantAuthStore();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const { orders, updateOrderStatus } = useOrderStore();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (user === 'atend' && password === 'atend@2026') {
-      setIsLoggedIn(true);
+      login();
       setError('');
     } else {
       setError('Credenciais inválidas.');
@@ -39,14 +25,11 @@ export const AttendantDashboardPage: React.FC = () => {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    logout();
     setUser('');
     setPassword('');
   };
 
-  const updateOrderStatus = (id: string, newStatus: Order['status']) => {
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
-  };
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     e.dataTransfer.setData('orderId', id);
@@ -175,11 +158,24 @@ export const AttendantDashboardPage: React.FC = () => {
                       <span className="text-xs text-text-secondary font-medium bg-gray-100 px-2 py-1 rounded-md">{order.time}</span>
                     </div>
                     
-                    <div className="flex flex-col gap-1">
-                      {order.items.map((item, i) => (
-                        <span key={i} className="text-sm text-text-secondary">• {item}</span>
-                      ))}
-                    </div>
+                    <div className="flex flex-col gap-1 my-3">
+                        {order.items.map((item, i) => (
+                          <div key={i} className="flex flex-col mb-1">
+                            <span className="text-sm text-text-secondary font-medium">
+                              • {item.quantity}x {item.name}
+                            </span>
+                            {item.additionals && item.additionals.length > 0 && (
+                              <div className="pl-3 flex flex-col">
+                                {item.additionals.map((add, idx) => (
+                                  <span key={idx} className="text-xs text-gray-500">
+                                    + {add.name}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     
                     <div className="pt-2 flex items-center justify-between mt-auto">
                       <span className="font-bold text-text-primary">

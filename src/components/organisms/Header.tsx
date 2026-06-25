@@ -1,8 +1,9 @@
 import React from 'react';
-import { User, ShoppingBag, LogOut, Utensils, Tag } from 'lucide-react';
+import { User, ShoppingBag, LogOut, Utensils, Tag, MapPin } from 'lucide-react';
 import logo from "../../assets/images/logo-pequeno.png"
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
+import { useOrderStore } from '../../store/orderStore';
 import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
@@ -13,7 +14,10 @@ export const Header: React.FC<HeaderProps> = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
   const items = useCartStore(state => state.items);
   const getCartTotal = useCartStore(state => state.getCartTotal);
+  const orders = useOrderStore(state => state.orders);
   const location = useLocation();
+
+  const activeOrdersCount = orders.filter(o => o.customer === user?.name && o.status !== 'completed').length;
 
   const formattedTotal = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -59,6 +63,29 @@ export const Header: React.FC<HeaderProps> = () => {
             location.pathname === '/promocoes' ? 'font-semibold' : 'font-medium'
           }`}>
             Promoções e Cupons
+          </span>
+        </Link>
+
+        {/* Link Acompanhamento que expande */}
+        <Link 
+          to="/acompanhamento" 
+          className={`group flex items-center bg-bg-surface border border-transparent hover:border-gray-200 rounded-full p-2 hover:bg-gray-50 transition-all duration-300 ease-in-out ${
+            location.pathname === '/acompanhamento' ? 'text-primary' : 'text-text-secondary hover:text-primary'
+          }`}
+          aria-label="Acompanhar Pedido"
+        >
+          <div className="relative flex items-center justify-center">
+            <MapPin size={22} className="shrink-0" />
+            {activeOrdersCount > 0 && (
+              <span className="absolute -top-1.5 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white z-10 animate-pulse border-2 border-white shadow-sm">
+                {activeOrdersCount}
+              </span>
+            )}
+          </div>
+          <span className={`max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[160px] group-hover:opacity-100 group-hover:ml-2 group-hover:pr-2 transition-all duration-300 ${
+            location.pathname === '/acompanhamento' ? 'font-semibold' : 'font-medium'
+          }`}>
+            Acompanhar Pedidos
           </span>
         </Link>
       </nav>

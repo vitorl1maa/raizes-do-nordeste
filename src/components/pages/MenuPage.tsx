@@ -5,9 +5,10 @@ import { SearchInput } from '../molecules/SearchInput';
 import { ProductGrid } from '../organisms/ProductGrid';
 import { CartSummary } from '../organisms/CartSummary';
 import { SlidersHorizontal } from 'lucide-react';
-import { CATEGORIES, MOCK_PRODUCTS } from '../../mocks';
+import { CATEGORIES } from '../../mocks';
 import { useCartStore } from '../../store/cartStore';
 import { useAuthStore } from '../../store/authStore';
+import { useProductStore } from '../../store/productStore';
 
 export const MenuPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("Todos");
@@ -17,9 +18,14 @@ export const MenuPage: React.FC = () => {
   const navigate = useNavigate();
   const { items: cartItems, addItem, updateQuantity, getCartTotal, removeItem } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+  const { products } = useProductStore();
 
-  // Select the appropriate array directly from the MOCK_PRODUCTS object
-  const currentCategoryProducts = (MOCK_PRODUCTS as Record<string, any[]>)[activeCategory] || MOCK_PRODUCTS["Todos"];
+  // Filter products by active status and category
+  const activeProducts = products.filter(p => p.active !== false);
+
+  const currentCategoryProducts = activeCategory === "Todos" 
+    ? activeProducts 
+    : activeProducts.filter(p => p.category === activeCategory);
 
   const filteredProducts = currentCategoryProducts.filter(product => {
     return product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -33,11 +39,10 @@ export const MenuPage: React.FC = () => {
   });
 
   const handleAddProduct = (id: string | number) => {
-    // Find product from all products (Todos)
-    const product = MOCK_PRODUCTS["Todos"].find(p => p.id === id);
+    const product = products.find(p => p.id === Number(id));
     if (product) {
       addItem({
-        id: product.id as string | number,
+        id: product.id,
         name: product.title,
         price: product.price
       });

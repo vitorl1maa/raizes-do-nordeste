@@ -5,7 +5,7 @@ export interface ProductAdditional {
 }
 
 export interface ProductDetail {
-  id: number;
+  id?: number;
   weight?: string;
   servings?: string;
   prepTime?: string;

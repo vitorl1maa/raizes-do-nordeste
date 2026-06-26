@@ -2,12 +2,7 @@ import React from 'react';
 import { Button } from '../atoms/Button';
 import { Trash2 } from 'lucide-react';
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
+import type { CartItem } from '../../store/cartStore';
 
 interface CartSummaryProps {
   items: CartItem[];

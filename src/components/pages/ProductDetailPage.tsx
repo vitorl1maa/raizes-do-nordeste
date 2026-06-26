@@ -3,9 +3,10 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Header } from '../organisms/Header';
 import { Button } from '../atoms/Button';
 import { Badge } from '../atoms/Badge';
-import { MOCK_PRODUCTS, PRODUCT_DETAILS } from '../../mocks';
+import { PRODUCT_DETAILS } from '../../mocks';
 import { useCartStore } from '../../store/cartStore';
 import { useAuthStore } from '../../store/authStore';
+import { useProductStore } from '../../store/productStore';
 import { 
   ArrowLeft, 
   Minus, 
@@ -26,6 +27,7 @@ export const ProductDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { items: cartItems, addItem, updateQuantity } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+  const { products } = useProductStore();
   const [quantity, setQuantity] = useState(1);
   const [selectedAdditionals, setSelectedAdditionals] = useState<number[]>([]);
   const [observation, setObservation] = useState('');
@@ -33,12 +35,30 @@ export const ProductDetailPage: React.FC = () => {
 
   const product = useMemo(() => {
     const numId = Number(id);
-    return MOCK_PRODUCTS["Todos"].find(p => p.id === numId);
-  }, [id]);
+    return products.find(p => p.id === numId);
+  }, [id, products]);
 
   const details = useMemo(() => {
     const numId = Number(id);
-    return PRODUCT_DETAILS[numId];
+    return PRODUCT_DETAILS[numId] || {
+      id: numId,
+      weight: "250g",
+      calories: "320 kcal",
+      prepTime: "15 min",
+      servings: "1 pessoa",
+      additionals: [
+        { id: 1, name: "Queijo Coalho Extra", price: 4.50 },
+        { id: 2, name: "Carne de Sol Extra", price: 8.00 },
+        { id: 3, name: "Manteiga de Garrafa", price: 1.50 }
+      ],
+      ingredients: ["Goma de mandioca hidratada", "Carne de sol desfiada", "Queijo coalho ralado", "Manteiga"],
+      nutritionalInfo: {
+        carb: "45g",
+        protein: "18g",
+        fat: "12g",
+        sodium: "220mg"
+      }
+    };
   }, [id]);
 
   if (!product) {
@@ -144,8 +164,8 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   // Find related products from same category
-  const relatedProducts = MOCK_PRODUCTS["Todos"]
-    .filter(p => p.category === product.category && p.id !== product.id)
+  const relatedProducts = products
+    .filter(p => p.active !== false && p.category === product.category && p.id !== product.id)
     .slice(0, 3);
 
   return (
@@ -181,9 +201,9 @@ export const ProductDetailPage: React.FC = () => {
                 alt={product.title}
                 className="w-full h-full object-cover"
               />
-              {product.badge && (
+              {(product as any).badge && (
                 <div className="absolute top-4 left-4">
-                  <Badge variant="secondary">{product.badge}</Badge>
+                  <Badge variant="secondary">{(product as any).badge}</Badge>
                 </div>
               )}
             </div>

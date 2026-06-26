@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, ShoppingBag, LogOut, Utensils, Tag, MapPin } from 'lucide-react';
+import { User, ShoppingBag, Utensils, Tag, MapPin } from 'lucide-react';
 import logo from "../../assets/images/logo-pequeno.png"
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
@@ -11,8 +11,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = () => {
-  const { isAuthenticated, user, logout } = useAuthStore();
-  const items = useCartStore(state => state.items);
+  const { isAuthenticated, user } = useAuthStore();
   const getCartTotal = useCartStore(state => state.getCartTotal);
   const orders = useOrderStore(state => state.orders);
   const location = useLocation();
@@ -32,8 +31,8 @@ export const Header: React.FC<HeaderProps> = () => {
         </Link>
       </div>
 
-      <div className="flex items-center gap-8">
-      <nav className="hidden md:flex items-center gap-2">
+      <div className="flex items-center gap-3 md:gap-8">
+      <nav className="flex items-center gap-1 md:gap-2">
         {/* Link Cardápio que expande */}
         <Link 
           to="/cardapio" 
@@ -94,14 +93,18 @@ export const Header: React.FC<HeaderProps> = () => {
         {isAuthenticated ? (
           <div className="flex items-center gap-2 md:mr-2">
             <Link to="/perfil" className="flex items-center gap-2 hover:bg-gray-50 rounded-full md:pr-3 transition-colors cursor-pointer" aria-label="Acessar Perfil">
-              {user?.avatar && (
-                <img src={user.avatar} alt="Avatar" className="w-12 h-12 rounded-full border border-gray-200 object-cover bg-white" />
+              {user?.avatar ? (
+                <img src={user.avatar} alt="Avatar" className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-200 object-cover bg-white" />
+              ) : (
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-200 flex items-center justify-center bg-white text-text-primary">
+                  <></>
+                </div>
               )}
               <span className="text-text-primary font-bold text-lg hidden md:inline-block">Olá, {user?.name.split(' ')[0]}</span>
             </Link>
           </div>
         ) : (
-          <Link to="/login" className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors" aria-label="Perfil">
+          <Link to="/login" className="p-2 text-text-primary hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center" aria-label="Perfil">
             <></>
           </Link>
         )}

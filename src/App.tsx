@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { MenuPage } from './components/pages/MenuPage';
 import { LoginPage } from './components/pages/LoginPage';
@@ -11,6 +10,9 @@ import { CookiesDrawer } from './components/organisms/CookiesDrawer';
 import { AvatarModal } from './components/organisms/AvatarModal';
 import { AttendantDashboardPage } from './components/pages/AttendantDashboardPage';
 import { ProductDetailPage } from './components/pages/ProductDetailPage';
+import { TotemPage } from './components/pages/TotemPage';
+import { ManagerDashboardPage } from './components/pages/ManagerDashboardPage';
+import { ManagerMenuPage } from './components/pages/ManagerMenuPage';
 
 function App() {
   return (
@@ -25,6 +27,10 @@ function App() {
         <Route path="/perfil" element={<ProfilePage />} />
         <Route path="/atendimento" element={<AttendantDashboardPage />} />
         <Route path="/produto/:id" element={<ProductDetailPage />} />
+        <Route path="/totem" element={<TotemPage />} />
+        <Route path="/gerente" element={<Navigate to="/gerente/dashboard" replace />} />
+        <Route path="/gerente/dashboard" element={<ManagerDashboardPage />} />
+        <Route path="/gerente/cardapio" element={<ManagerMenuPage />} />
         <Route path="/" element={<Navigate to="/cardapio" replace />} />
       </Routes>
       <CookiesDrawer />

@@ -207,6 +207,80 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Tabs: Ingredients / Nutritional Info / Allergens */}
+            {details && (
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Ingredients */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-6">
+                  <h3 className="font-bold text-text-primary text-lg mb-4">Ingredientes</h3>
+                  <ul className="flex flex-col gap-2">
+                    {details.ingredients.map((ingredient, i) => (
+                      <li key={i} className="flex items-center gap-2 text-text-secondary">
+                        <span className="w-2 h-2 bg-primary rounded-full shrink-0" />
+                        {ingredient}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Nutritional Info */}
+                {details.nutritionalInfo && (
+                  <div className="bg-white border border-gray-200 rounded-2xl p-6">
+                    <h3 className="font-bold text-text-primary text-lg mb-4 flex items-center gap-2">
+                      <Flame size={20} className="text-primary" />
+                      Informação Nutricional
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      {details.nutritionalInfo.calories && (
+                        <div className="bg-orange-50 rounded-xl p-3 text-center">
+                          <p className="text-2xl font-bold text-primary">{details.nutritionalInfo.calories.replace(' kcal', '')}</p>
+                          <p className="text-xs text-text-secondary mt-1">kcal</p>
+                        </div>
+                      )}
+                      {details.nutritionalInfo.protein && (
+                        <div className="bg-blue-50 rounded-xl p-3 text-center">
+                          <p className="text-2xl font-bold text-blue-600">{details.nutritionalInfo.protein}</p>
+                          <p className="text-xs text-text-secondary mt-1">Proteínas</p>
+                        </div>
+                      )}
+                      {details.nutritionalInfo.carbs && (
+                        <div className="bg-yellow-50 rounded-xl p-3 text-center">
+                          <p className="text-2xl font-bold text-yellow-600">{details.nutritionalInfo.carbs}</p>
+                          <p className="text-xs text-text-secondary mt-1">Carboidratos</p>
+                        </div>
+                      )}
+                      {details.nutritionalInfo.fat && (
+                        <div className="bg-purple-50 rounded-xl p-3 text-center">
+                          <p className="text-2xl font-bold text-purple-600">{details.nutritionalInfo.fat}</p>
+                          <p className="text-xs text-text-secondary mt-1">Gorduras</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Allergens */}
+                {details.allergens && details.allergens.length > 0 && (
+                  <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:col-span-2">
+                    <h3 className="font-bold text-text-primary text-lg mb-4 flex items-center gap-2">
+                      <AlertTriangle size={20} className="text-yellow-500" />
+                      Alérgenos
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {details.allergens.map((allergen, i) => (
+                        <span key={i} className="px-3 py-1.5 bg-yellow-50 text-yellow-700 rounded-lg text-sm font-medium border border-yellow-200">
+                          {allergen}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-xs text-text-secondary mt-4 leading-relaxed">
+                      Este produto pode conter traços dos alérgenos listados acima. Se você possui alguma alergia alimentar, consulte nosso atendente.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Details */}
@@ -344,79 +418,7 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Tabs: Ingredients / Nutritional Info */}
-        {details && (
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Ingredients */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="font-bold text-text-primary text-lg mb-4">Ingredientes</h3>
-              <ul className="flex flex-col gap-2">
-                {details.ingredients.map((ingredient, i) => (
-                  <li key={i} className="flex items-center gap-2 text-text-secondary">
-                    <span className="w-2 h-2 bg-primary rounded-full shrink-0" />
-                    {ingredient}
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            {/* Nutritional Info */}
-            {details.nutritionalInfo && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h3 className="font-bold text-text-primary text-lg mb-4 flex items-center gap-2">
-                  <Flame size={20} className="text-primary" />
-                  Informação Nutricional
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {details.nutritionalInfo.calories && (
-                    <div className="bg-orange-50 rounded-xl p-3 text-center">
-                      <p className="text-2xl font-bold text-primary">{details.nutritionalInfo.calories.replace(' kcal', '')}</p>
-                      <p className="text-xs text-text-secondary mt-1">kcal</p>
-                    </div>
-                  )}
-                  {details.nutritionalInfo.protein && (
-                    <div className="bg-blue-50 rounded-xl p-3 text-center">
-                      <p className="text-2xl font-bold text-blue-600">{details.nutritionalInfo.protein}</p>
-                      <p className="text-xs text-text-secondary mt-1">Proteínas</p>
-                    </div>
-                  )}
-                  {details.nutritionalInfo.carbs && (
-                    <div className="bg-yellow-50 rounded-xl p-3 text-center">
-                      <p className="text-2xl font-bold text-yellow-600">{details.nutritionalInfo.carbs}</p>
-                      <p className="text-xs text-text-secondary mt-1">Carboidratos</p>
-                    </div>
-                  )}
-                  {details.nutritionalInfo.fat && (
-                    <div className="bg-purple-50 rounded-xl p-3 text-center">
-                      <p className="text-2xl font-bold text-purple-600">{details.nutritionalInfo.fat}</p>
-                      <p className="text-xs text-text-secondary mt-1">Gorduras</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Allergens */}
-            {details.allergens && details.allergens.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h3 className="font-bold text-text-primary text-lg mb-4 flex items-center gap-2">
-                  <AlertTriangle size={20} className="text-yellow-500" />
-                  Alérgenos
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {details.allergens.map((allergen, i) => (
-                    <span key={i} className="px-3 py-1.5 bg-yellow-50 text-yellow-700 rounded-lg text-sm font-medium border border-yellow-200">
-                      {allergen}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-xs text-text-secondary mt-4 leading-relaxed">
-                  Este produto pode conter traços dos alérgenos listados acima. Se você possui alguma alergia alimentar, consulte nosso atendente.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

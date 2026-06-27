@@ -13,12 +13,15 @@ import { ProductDetailPage } from './components/pages/ProductDetailPage';
 import { TotemPage } from './components/pages/TotemPage';
 import { ManagerDashboardPage } from './components/pages/ManagerDashboardPage';
 import { ManagerMenuPage } from './components/pages/ManagerMenuPage';
+import { SkillLibraryPage } from './components/pages/SkillLibraryPage';
+import { LoyaltyPage } from './components/pages/LoyaltyPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/cardapio" element={<MenuPage />} />
+        <Route path="/fidelidade" element={<LoyaltyPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
@@ -31,6 +34,7 @@ function App() {
         <Route path="/gerente" element={<Navigate to="/gerente/dashboard" replace />} />
         <Route path="/gerente/dashboard" element={<ManagerDashboardPage />} />
         <Route path="/gerente/cardapio" element={<ManagerMenuPage />} />
+        <Route path="/skills" element={<SkillLibraryPage />} />
         <Route path="/" element={<Navigate to="/cardapio" replace />} />
       </Routes>
       <CookiesDrawer />

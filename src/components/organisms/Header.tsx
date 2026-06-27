@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, ShoppingBag, Utensils, Tag, MapPin } from 'lucide-react';
+import { User, ShoppingBag, Utensils, Tag, MapPin, Star } from 'lucide-react';
 import logo from "../../assets/images/logo-pequeno.png"
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
@@ -62,6 +62,22 @@ export const Header: React.FC<HeaderProps> = () => {
             location.pathname === '/promocoes' ? 'font-semibold' : 'font-medium'
           }`}>
             Promoções e Cupons
+          </span>
+        </Link>
+
+        {/* Link Clube Raízes que expande */}
+        <Link 
+          to="/fidelidade" 
+          className={`group flex items-center bg-bg-surface border border-transparent hover:border-gray-200 rounded-full p-2 hover:bg-gray-50 transition-all duration-300 ease-in-out ${
+            location.pathname === '/fidelidade' ? 'text-primary' : 'text-text-secondary hover:text-primary'
+          }`}
+          aria-label="Clube Raízes"
+        >
+          <Star size={22} className="shrink-0" />
+          <span className={`max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[160px] group-hover:opacity-100 group-hover:ml-2 group-hover:pr-2 transition-all duration-300 ${
+            location.pathname === '/fidelidade' ? 'font-semibold' : 'font-medium'
+          }`}>
+            Clube Raízes
           </span>
         </Link>
 

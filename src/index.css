@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  /* === Raízes do Nordeste tokens === */
   --color-primary: #FF4B16;
   --color-primary-dark: #D83A0D;
   --color-secondary: #FFD447;
@@ -18,6 +19,27 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-2xl: 32px;
+
+  /* === Skill Hub tokens === */
+  --color-sh-bg: #0B0F14;
+  --color-sh-surface: #111827;
+  --color-sh-surface-elevated: #151C28;
+  --color-sh-surface-hover: #1F2937;
+  --color-sh-border: #1F2937;
+  --color-sh-surface-border: #374151;
+  --color-sh-text-primary: #FFFFFF;
+  --color-sh-text-secondary: #94A3B8;
+  --color-sh-text-muted: #64748B;
+  --color-sh-primary: #3B82F6;
+  --color-sh-primary-hover: #1D4ED8;
+  --color-sh-accent: #06B6D4;
+  --color-sh-success: #10B981;
+  --color-sh-warning: #F59E0B;
+  --color-sh-error: #EF4444;
+  --color-sh-secondary: #2E2E2E;
+
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-geist: 'Geist', system-ui, sans-serif;
 }
 
 body {

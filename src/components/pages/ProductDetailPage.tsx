@@ -53,10 +53,10 @@ export const ProductDetailPage: React.FC = () => {
       ],
       ingredients: ["Goma de mandioca hidratada", "Carne de sol desfiada", "Queijo coalho ralado", "Manteiga"],
       nutritionalInfo: {
-        carb: "45g",
+        calories: "320 kcal",
         protein: "18g",
-        fat: "12g",
-        sodium: "220mg"
+        carbs: "45g",
+        fat: "12g"
       }
     };
   }, [id]);

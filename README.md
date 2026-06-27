@@ -39,7 +39,7 @@ Certifique-se de ter o **Node.js** (versão 18+) e o **npm** instalados na sua m
    npm run build
    ```
 
-## 🛠 Tecnologias Utilizadas
+## ⚒️ Tecnologias Utilizadas
 
 - **React 19**
 - **TypeScript**
@@ -50,7 +50,7 @@ Certifique-se de ter o **Node.js** (versão 18+) e o **npm** instalados na sua m
 - **Vitest** (Testes)
 - **Recharts** (Gráficos no Dashboard do Gerente)
 
-## 🗺 Estrutura de Páginas
+## 🗺️ Estrutura de Páginas
 
 A aplicação é dividida em diferentes contextos de usuário:
 

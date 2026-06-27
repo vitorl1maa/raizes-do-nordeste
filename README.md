@@ -77,8 +77,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 
 ### Cenário 1: Fluxo do Cliente (Site do Restaurante)
 - **Link de Acesso:** [Acessar Cardápio](https://raizes-do-nordeste-flax.vercel.app/cardapio)
-- **Demonstração em Vídeo:**
-  ![Cardápio](./src/assets/videos/cardapio.mp4)
+- **Demonstração em Vídeo:** [🎥 Assistir Vídeo do Cardápio](./src/assets/videos/cardapio.mp4)
 
 **Como testar (Explicação):**
 1. A primeira tela com a qual o usuário se depara é a tela de **Cardápio**.
@@ -98,8 +97,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 - **Credenciais:** 
   - Usuário: `atend`
   - Senha: `atend@2026`
-- **Demonstração em Vídeo:**
-  ![Atendimento](./src/assets/videos/atendimento.mp4)
+- **Demonstração em Vídeo:** [🎥 Assistir Vídeo do Atendimento](./src/assets/videos/atendimento.mp4)
 
 **Como testar (Explicação):**
 1. O usuário acessa o link de atendimento e faz o login com as credenciais fornecidas.
@@ -111,8 +109,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 - **Credenciais:** 
   - Usuário: `gerencia`
   - Senha: `gen@2026`
-- **Demonstração em Vídeo:**
-  ![Gerência](./src/assets/videos/gerencia.mp4)
+- **Demonstração em Vídeo:** [🎥 Assistir Vídeo da Gerência](./src/assets/videos/gerencia.mp4)
 
 **Como testar (Explicação):**
 1. O usuário acessa o link e insere as credenciais de Gerente.
@@ -121,8 +118,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 
 ### Cenário 4: Fluxo de Totem
 - **Link de Acesso:** [Acessar Totem de Autoatendimento](https://raizes-do-nordeste-flax.vercel.app/totem)
-- **Demonstração em Vídeo:**
-  ![Totem](./src/assets/videos/totem.mp4)
+- **Demonstração em Vídeo:** [🎥 Assistir Vídeo do Totem](./src/assets/videos/totem.mp4)
 
 **Como testar (Explicação):**
 1. O usuário acessa a rota destinada ao totem físico da loja.

@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import { Header } from '../organisms/Header';
 import { useAuthStore } from '../../store/authStore';
 import { User, Shield, Lock, Save, ShoppingBag, History, Star, Download, Trash2, Eye, EyeOff, LogOut, Pencil, Check } from 'lucide-react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export function ProfilePage() {
   const { user, isAuthenticated, logout, openAvatarModal } = useAuthStore();
-  const [activeTab, setActiveTab] = useState('dados');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'dados');
+  
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+    }
+  }, [location.state]);
   
   // States for form
   const [name, setName] = useState(user?.name || '');

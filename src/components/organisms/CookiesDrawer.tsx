@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { Cookie, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function CookiesDrawer() {
   const { isAuthenticated, user, usersCookiesAccepted, acceptCookies } = useAuthStore();
@@ -49,7 +50,7 @@ export function CookiesDrawer() {
           <p className="text-sm text-slate-600">
             Nós utilizamos <strong>cookies essenciais</strong> para garantir o funcionamento correto e seguro da nossa plataforma, 
             como manter sua sessão ativa e salvar suas preferências locais. Por serem estritamente necessários, eles não podem ser desativados. 
-            Para mais detalhes, consulte nossa <a href="/politica-de-privacidade" className="text-orange-500 hover:underline">Política de Privacidade</a>.
+            Para mais detalhes, consulte nossa <Link to="/perfil" state={{ tab: 'privacidade' }} onClick={handleClose} className="text-orange-500 hover:underline">Política de Privacidade</Link>.
           </p>
         </div>
         

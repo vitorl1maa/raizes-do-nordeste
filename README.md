@@ -76,8 +76,10 @@ A aplicação é dividida em diferentes contextos de usuário:
 Para realizar uma avaliação manual e formal da plataforma, o orientador pode acessar os links de produção, utilizar as credenciais fornecidas e seguir os fluxos objetivos abaixo, ou conferir as gravações de tela (vídeos):
 
 ### Cenário 1: Fluxo do Cliente (Site do Restaurante)
-- **Link de Acesso:** [Acessar Cardápio](https://raizes-do-nordeste-flax.vercel.app/cardapio)
+- **Link de Acesso:** <a href="https://raizes-do-nordeste-flax.vercel.app/cardapio" target="_blank">Acessar Cardápio</a>
 - **Demonstração em Vídeo:** [🎥 Assistir Vídeo do Cardápio](./src/assets/videos/cardapio.mp4)
+
+![Cardápio](./src/assets/images/cardapio.png)
 
 **Como testar (Explicação):**
 1. A primeira tela com a qual o usuário se depara é a tela de **Cardápio**.
@@ -92,33 +94,45 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 8. O usuário **confirma o pedido**.
 9. O pedido é processado e o usuário é redirecionado para a **tela de Acompanhamentos**, onde consegue monitorar o status do pedido em tempo real.
 
+---
+
 ### Cenário 2: Fluxo do Atendente
-- **Link de Acesso:** [Acessar Painel de Atendimento](https://raizes-do-nordeste-flax.vercel.app/atendimento)
+- **Link de Acesso:** <a href="https://raizes-do-nordeste-flax.vercel.app/atendimento" target="_blank">Acessar Painel de Atendimento</a>
 - **Credenciais:** 
   - Usuário: `atend`
   - Senha: `atend@2026`
 - **Demonstração em Vídeo:** [🎥 Assistir Vídeo do Atendimento](./src/assets/videos/atendimento.mp4)
+
+![Atendimento](./src/assets/images/atendimento.png)
 
 **Como testar (Explicação):**
 1. O usuário acessa o link de atendimento e faz o login com as credenciais fornecidas.
 2. Na tela de **Painel (Kanban)**, o atendente visualiza o pedido recém-criado pelo cliente na coluna "Em Preparo".
 3. O atendente testa o fluxo operacional arrastando (drag and drop) o pedido para as próximas etapas (ex: "Saiu para Entrega" e "Entregue"), validando a mudança de status do pedido.
 
+---
+
 ### Cenário 3: Fluxo do Gerente
-- **Link de Acesso:** [Acessar Dashboard Gerencial](https://raizes-do-nordeste-flax.vercel.app/gerente/dashboard)
+- **Link de Acesso:** <a href="https://raizes-do-nordeste-flax.vercel.app/gerente/dashboard" target="_blank">Acessar Dashboard Gerencial</a>
 - **Credenciais:** 
   - Usuário: `gerencia`
   - Senha: `gen@2026`
 - **Demonstração em Vídeo:** [🎥 Assistir Vídeo da Gerência](./src/assets/videos/gerencia.mp4)
+
+![Gerência](./src/assets/images/gerencia.png)
 
 **Como testar (Explicação):**
 1. O usuário acessa o link e insere as credenciais de Gerente.
 2. No **Dashboard**, visualiza os gráficos de métricas financeiras, ticket médio e volume de pedidos por hora.
 3. Na aba de **Gestão de Cardápio**, o gerente testa a funcionalidade de habilitar ou desabilitar (ativo/inativo) a exibição de produtos no estoque para a loja principal.
 
+---
+
 ### Cenário 4: Fluxo de Totem
-- **Link de Acesso:** [Acessar Totem de Autoatendimento](https://raizes-do-nordeste-flax.vercel.app/totem)
+- **Link de Acesso:** <a href="https://raizes-do-nordeste-flax.vercel.app/totem" target="_blank">Acessar Totem de Autoatendimento</a>
 - **Demonstração em Vídeo:** [🎥 Assistir Vídeo do Totem](./src/assets/videos/totem.mp4)
+
+![Totem](./src/assets/images/totem.png)
 
 **Como testar (Explicação):**
 1. O usuário acessa a rota destinada ao totem físico da loja.

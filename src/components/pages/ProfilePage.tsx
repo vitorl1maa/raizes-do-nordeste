@@ -13,6 +13,23 @@ export function ProfilePage() {
   const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState('(81) 99999-9999');
   
+  const handlePhoneChange = (value: string) => {
+    const digits = value.replace(/\D/g, '').substring(0, 11);
+    if (digits.length === 0) {
+      setPhone('');
+      return;
+    }
+    if (digits.length <= 2) {
+      setPhone(`(${digits}`);
+      return;
+    }
+    if (digits.length <= 7) {
+      setPhone(`(${digits.substring(0, 2)}) ${digits.substring(2)}`);
+      return;
+    }
+    setPhone(`(${digits.substring(0, 2)}) ${digits.substring(2, 7)}-${digits.substring(7)}`);
+  };
+  
   // State for promotions toggle
   const [receivePromotions, setReceivePromotions] = useState(true);
   
@@ -137,7 +154,9 @@ export function ProfilePage() {
                       <input 
                         type="text" 
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => handlePhoneChange(e.target.value)}
+                        placeholder="(00) 00000-0000"
+                        maxLength={15}
                         className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
                       />
                     </div>

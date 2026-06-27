@@ -18,6 +18,23 @@ export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handlePhoneChange = (value: string) => {
+    const digits = value.replace(/\D/g, '').substring(0, 11);
+    if (digits.length === 0) {
+      setPhone('');
+      return;
+    }
+    if (digits.length <= 2) {
+      setPhone(`(${digits}`);
+      return;
+    }
+    if (digits.length <= 7) {
+      setPhone(`(${digits.substring(0, 2)}) ${digits.substring(2)}`);
+      return;
+    }
+    setPhone(`(${digits.substring(0, 2)}) ${digits.substring(2, 7)}-${digits.substring(7)}`);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -77,8 +94,9 @@ export const RegisterPage: React.FC = () => {
             type="tel" 
             required
             value={phone}
-            onChange={e => setPhone(e.target.value)}
+            onChange={e => handlePhoneChange(e.target.value)}
             placeholder="(00) 00000-0000"
+            maxLength={15}
           />
           <Input 
             label="Senha"

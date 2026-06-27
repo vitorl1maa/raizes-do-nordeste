@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="src/assets/images/raizes-logo.png" alt="Raízes do Nordeste Logo" width="500"/>
+  ![Raízes do Nordeste Logo](./src/assets/images/raizes-logo.png)
 </div>
 
 # Raízes do Nordeste - Delivery App
@@ -78,7 +78,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 ### Cenário 1: Fluxo do Cliente (Site do Restaurante)
 - **Link de Acesso:** [Acessar Cardápio](https://raizes-do-nordeste-flax.vercel.app/cardapio)
 - **Demonstração em Vídeo:**
-  <video src="src/assets/videos/cardapio.mp4" controls width="100%"></video>
+  ![Cardápio](./src/assets/videos/cardapio.mp4)
 
 **Como testar (Explicação):**
 1. A primeira tela com a qual o usuário se depara é a tela de **Cardápio**.
@@ -99,7 +99,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
   - Usuário: `atend`
   - Senha: `atend@2026`
 - **Demonstração em Vídeo:**
-  <video src="src/assets/videos/atendimento.mp4" controls width="100%"></video>
+  ![Atendimento](./src/assets/videos/atendimento.mp4)
 
 **Como testar (Explicação):**
 1. O usuário acessa o link de atendimento e faz o login com as credenciais fornecidas.
@@ -112,7 +112,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
   - Usuário: `gerencia`
   - Senha: `gen@2026`
 - **Demonstração em Vídeo:**
-  <video src="src/assets/videos/gerencia.mp4" controls width="100%"></video>
+  ![Gerência](./src/assets/videos/gerencia.mp4)
 
 **Como testar (Explicação):**
 1. O usuário acessa o link e insere as credenciais de Gerente.
@@ -122,7 +122,7 @@ Para realizar uma avaliação manual e formal da plataforma, o orientador pode a
 ### Cenário 4: Fluxo de Totem
 - **Link de Acesso:** [Acessar Totem de Autoatendimento](https://raizes-do-nordeste-flax.vercel.app/totem)
 - **Demonstração em Vídeo:**
-  <video src="src/assets/videos/totem.mp4" controls width="100%"></video>
+  ![Totem](./src/assets/videos/totem.mp4)
 
 **Como testar (Explicação):**
 1. O usuário acessa a rota destinada ao totem físico da loja.
